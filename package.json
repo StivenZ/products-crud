@@ -1,0 +1,28 @@
+{
+  "name": "lambda-deploy",
+  "version": "1.0.0",
+  "description": "Basic items crud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StivenZ/products-crud.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StivenZ/products-crud/issues"
+  },
+  "homepage": "https://github.com/StivenZ/products-crud#readme",
+  "dependencies": {
+    "aws-sdk": "^2.975.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^6.0.0",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.0.0"
+  }
+}
