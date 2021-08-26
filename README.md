@@ -102,7 +102,7 @@ the complete service can be fount at:
 
 http://simplecrudtest.s3-website-sa-east-1.amazonaws.com/
 
-Once oopen, product objects can be created using the input on the right, and can be updated or deleted using the items at the left.
+Once open, product objects can be created using the input on the right, and can be updated or deleted using the items at the left.
 
 ## Authors :black_nib:
 * **Steven Espinosa** <[StivenZ](https://github.com/)>
