@@ -13,7 +13,8 @@ Products CRUD exposes an API to perform the basic operations.
 ## Endpoints :end:
 
 Product CRUD uses the following resources:
-
+|     | route | method | description |
+| --- | ----- | ------ | ----------- |
 | **/dev/products** | GET | retrieves all the products in the database |
 | **/dev/products/:id** | GET | retrieves a specific product based on its id |
 | **/dev/products** | POST | creates a new product object and saves it on the database | information with the parameters to create the object must be passed in the body of the request |
