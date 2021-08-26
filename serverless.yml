@@ -42,8 +42,8 @@ functions:
           method: PUT
           cors: true
 
-  delete:
-    handler: src/handler.delete
+  deleteOne:
+    handler: src/handler.deleteOne
     events:
       - http:
           path: products/{id}

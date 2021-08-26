@@ -1,95 +1,148 @@
-const connectToDatabase = require('../db/db.js')
-const ProductModel = require('../db/models/Product.Model.js')
+const connectToDatabase = require('./db/db.js');
 const dotenv = require( 'dotenv/config');
-
+const services = require('./services');
 'use strict';
 
-module.exports.create = (event, context, callback) => {
+module.exports.create = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
-    connectToDatabase()
-      .then(() => {
-        ProductModel.create(JSON.parse(event.body))
-          .then(newProduct => callback(null, {
+    console.log('Mi evento:', event);
+
+    const conn = await connectToDatabase();
+    try {
+        const newProduct = await services.create(JSON.parse(event.body));
+
+        return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
             body: JSON.stringify(newProduct)
-          }))
-          .catch(err => callback(null, {
+        }
+    } catch (err) {
+        return {
             statusCode: err.statusCode || 500,
             headers: { 'Content-Type': 'text/plain' },
-            body: 'Could not create the note.'
-          }));
-      });
+            body: 'Could not create the Product.'
+        }
+    }
 };
 
-module.exports.listOne = (event, context, callback) => {
+module.exports.listOne = async (event, context) => {
+    
   context.callbackWaitsForEmptyEventLoop = false;
 
-  connectToDatabase()
-    .then(() => {
-      ProductModel.findById(event.pathParameters.id)
-        .then(ProductModel => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(ProductModel)
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the ProductModel.'
-        }));
-    });
+  const conn = await connectToDatabase();
+
+  try {
+      const productObject = await services.listOne(event.pathParameters.id);
+      console.log(productObject);
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify(productObject)
+      }
+  } catch (err) {
+      return {
+        statusCode: err.statusCode || 500,
+        headers: { 
+          'Content-Type': 'text/plain',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: 'Could not fetch the Product.'
+      }
+  }
 };
 
-module.exports.listAll = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
+module.exports.listAll = async (event, context) => {
+    context.callbackWaitsForEmptyEventLoop = false;
 
-  connectToDatabase()
-    .then(() => {
-      ProductModel.find()
-        .then(products => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(products)
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the ProductModels.'
-        }))
-    });
+    const conn = await connectToDatabase();
+
+    try {
+        const products = await services.listAll();
+
+        return {
+            statusCode: 200,
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify(products)
+        }
+    } catch (err) {
+        return {
+            statusCode: err.statusCode || 500,
+            headers: { 
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+            },
+            body: 'Could not fetch the Product.'
+        }
+    }
 };
 
-module.exports.edit = (event, context, callback) => {
+module.exports.edit = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  const conn = await connectToDatabase();
+
   connectToDatabase()
-    .then(() => {
-      ProductModel.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
-        .then(product => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(product)
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the ProductModels.'
-        }));
-    });
+
+  try {
+        const editedProduct = await services.edit(event.pathParameters.id, JSON.parse(event.body), { new: true });
+        return {
+            statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify(editedProduct)
+        }
+  } catch (err) {
+      return {
+        statusCode: err.statusCode || 500,
+        headers: { 
+          'Content-Type': 'text/plain',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: 'Could not fetch the Product.'
+      }
+  }
 };
 
-module.exports.delete = (event, context, callback) => {
+module.exports.deleteOne = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  connectToDatabase()
-    .then(() => {
-      ProductModel.findByIdAndRemove(event.pathParameters.id)
-        .then(product => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify({ message: 'Removed ProductModel with id: ' + product._id, product: product })
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the ProductModels.'
-        }));
-    });
+  const conn = await connectToDatabase();
+
+  try {
+      const product = await services.deleteOne(event.pathParameters.id);
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify({ message: 'Removed Product with id: ' + product._id, product: product })
+      }
+  } catch (err) {
+      return {
+        statusCode: err.statusCode || 500,
+        headers: { 
+          'Content-Type': 'text/plain',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: 'Could not fetch the Product.'
+      }
+  }
 };
