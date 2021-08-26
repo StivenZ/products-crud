@@ -8,7 +8,7 @@
 ---
 ## Description
 
-Products CRUD exposes an API to perform the basic operations. 
+Products CRUD exposes an API to perform the basic operations. The backend was built using serverless framework, javascript, and was deployed using the aws free tier services: API gateway and AWS lambda.
 
 ## Endpoints :end:
 
@@ -97,5 +97,12 @@ Unittests for the app are defined in the `/__tests__` folder. To run the entire 
 ```bash
 npm run test
 ```
+
+the complete service can be fount at:
+
+http://simplecrudtest.s3-website-sa-east-1.amazonaws.com/
+
+Once oopen, product objects can be created using the input on the right, and can be updated or deleted using the items at the left.
+
 ## Authors :black_nib:
 * **Steven Espinosa** <[StivenZ](https://github.com/)>
